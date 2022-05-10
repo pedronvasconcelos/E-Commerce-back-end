@@ -1,15 +1,5 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using NSE.Identidade.API.Configuration;
+using NSE.Identity.API.Configuration;
 
 namespace NSE.Identitiy.API
 {
@@ -22,30 +12,36 @@ namespace NSE.Identitiy.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public Startup(IHostEnvironment hostEnvironment)
         {
-            services.AddControllers();
-        }
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(hostEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables();
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
+            if (hostEnvironment.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                builder.AddUserSecrets<Startup>();
             }
 
-            app.UseHttpsRedirection();
+            Configuration = builder.Build();
+        }
 
-            app.UseRouting();
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddIdentityConfiguration(Configuration);
 
-            app.UseAuthorization();
+            services.AddApiConfiguration();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            services.AddSwaggerConfiguration();
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseSwaggerConfiguration();
+
+            app.UseApiConfiguration(env);
         }
     }
 }
