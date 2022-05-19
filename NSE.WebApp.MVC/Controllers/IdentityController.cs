@@ -29,7 +29,7 @@ namespace NSE.WebApp.MVC.Controllers
 
         [HttpPost]
         [Route("new-account")]
-        public async Task<IActionResult> Registro(UserRegister userRegister)
+        public async Task<IActionResult> Register(UserRegister userRegister)
         {
             if (!ModelState.IsValid) return View(userRegister);
 
@@ -69,11 +69,13 @@ namespace NSE.WebApp.MVC.Controllers
 
             if (ResponseHasErrors(resposta.ResponseResult)) return View(usuarioLogin);
 
-
+          
             else if (resposta.ResponseResult.Status.Equals(400) || resposta.ResponseResult is null)
             {
                 return View(usuarioLogin);
+
             }            
+        
             
             await SignIn(resposta);
 

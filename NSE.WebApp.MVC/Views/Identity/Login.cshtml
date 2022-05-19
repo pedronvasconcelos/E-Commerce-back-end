@@ -11,9 +11,7 @@
             <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                 <h4>Seja bem vindo e boas compras</h4>
                 <hr />
-                
-                <vc:Summary></vc:Summary>
-
+                <vc:Summary model="null"></vc:Summary>
                 <div class="form-group">
                     <label asp-for="Email"></label>
                     <input asp-for="Email" class="form-control" />

@@ -18,6 +18,6 @@ namespace NSE.WebApp.MVC.Models
 
     public class ResponseErrorMessages
     {
-        public List<string> Message { get; set; }
+        public List<string> Messages { get; set; }
     }
 }
