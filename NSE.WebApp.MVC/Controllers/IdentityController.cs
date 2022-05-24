@@ -68,15 +68,8 @@ namespace NSE.WebApp.MVC.Controllers
             var resposta = await _autenticacaoService.Login(usuarioLogin);
 
             if (ResponseHasErrors(resposta.ResponseResult)) return View(usuarioLogin);
-
           
-            else if (resposta.ResponseResult.Status.Equals(400) || resposta.ResponseResult is null)
-            {
-                return View(usuarioLogin);
-
-            }            
         
-            
             await SignIn(resposta);
 
             if (string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Home");
