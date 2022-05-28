@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using NSE.Core.Data;
 using NSE.Customers.API.Models;
 
-namespace NSE.Clientes.API.Models
+namespace NSE.Customers.API.Models
 {
     public interface ICustomerRepository : IRepository<Customer>
     {

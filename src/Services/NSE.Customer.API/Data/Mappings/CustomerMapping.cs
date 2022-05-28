@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NSE.Core.DomainObjects;
 using NSE.Customers.API.Models;
 
-namespace NSE.Clientes.API.Data.Mappings
+namespace NSE.Customers.API.Data.Mappings
 {
     public class CustomerMapping : IEntityTypeConfiguration<Customer>
     {

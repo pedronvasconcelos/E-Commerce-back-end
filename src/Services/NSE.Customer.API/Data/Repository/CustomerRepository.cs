@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using NSE.Clientes.API.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using NSE.Core.Data;
-using NSE.Customers.API.Data;
 using NSE.Customers.API.Models;
 
-namespace NSE.Clientes.API.Data.Repository
+namespace NSE.Customers.API.Data.Repository
 {
     public class CustomerRepository : ICustomerRepository
     {
@@ -26,10 +22,10 @@ namespace NSE.Clientes.API.Data.Repository
         
         public Task<Customer> GetByCpf(string cpf)
         {
-            return _context.Customers.FirstOrDefaultAsync(c => c.Cpf.Numero == cpf);
+            return _context.Customers.FirstOrDefaultAsync(c => c.Cpf.Number == cpf);
         }
         
-        public void Adicionar(Customer customer)
+        public void Add(Customer customer)
         {
             _context.Customers.Add(customer);
         }

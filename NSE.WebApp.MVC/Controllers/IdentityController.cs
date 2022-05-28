@@ -40,14 +40,10 @@ namespace NSE.WebApp.MVC.Controllers
                 return View(userRegister);
             }
 
-            else if (resposta.ResponseResult.Status.Equals(400))
-            {
-                return View(userRegister);
-            }
-
+          
             await SignIn(resposta);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Catalog");
         }
 
         [HttpGet]
@@ -72,7 +68,7 @@ namespace NSE.WebApp.MVC.Controllers
         
             await SignIn(resposta);
 
-            if (string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Home");
+            if (string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Catalog");
 
             return LocalRedirect(returnUrl);
         }
@@ -82,7 +78,7 @@ namespace NSE.WebApp.MVC.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Catalog");
         }
 
         private async Task SignIn(UserResponseLogin resposta)

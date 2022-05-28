@@ -30,6 +30,7 @@ namespace NSE.Core.DomainObjects
             _notifications?.Clear();
         }
 
+        #region Asserts
         public override bool Equals(object obj)
         {
             var compareTo = obj as Entity;
@@ -65,6 +66,6 @@ namespace NSE.Core.DomainObjects
         {
             return !(a == b);
         }
-
+        #endregion
     }
 }

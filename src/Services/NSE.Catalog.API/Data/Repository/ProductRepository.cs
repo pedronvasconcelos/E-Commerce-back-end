@@ -24,6 +24,8 @@ namespace NSE.Catalog.API.Data.Repository
             return await _context.Products.FindAsync(id);
         }
 
+       
+
         public void Update(Product product)
         {
             _context.Products.Add(product);

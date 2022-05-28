@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace NSE.Identity.API.Controllers
-{
+namespace NSE.WebAPI.Core.Controllers
+{   
     [ApiController]
     public abstract class MainController : Controller
     {
@@ -31,6 +37,15 @@ namespace NSE.Identity.API.Controllers
 
             return CustomResponse();
         }
+
+        protected ActionResult CustomResponse (ValidationResult validationResult)
+        {
+            foreach (var error in validationResult.Errors)
+            {
+                AddProcessingError(error.ErrorMessage);
+            }
+            return CustomResponse();
+        }
         protected bool OperationValid()
         {
             return !Errors.Any();
@@ -47,5 +62,3 @@ namespace NSE.Identity.API.Controllers
         }
     }
 }
-
- 

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NSE.Clientes.API.Models;
+using NSE.Customers.API.Models;
 using NSE.Customers.API.Models;
 
-namespace NSE.Clientes.API.Data.Mappings
+namespace NSE.Customers.API.Data.Mappings
 {
     public class AddressMapping : IEntityTypeConfiguration<Address>
     {
