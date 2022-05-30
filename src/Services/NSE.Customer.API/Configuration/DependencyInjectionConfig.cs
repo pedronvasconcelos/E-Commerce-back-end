@@ -6,7 +6,7 @@ using NSE.Customers.API.Application.Events;
 using MediatR;
 using NSE.Customers.API.Application.Commands;
 using FluentValidation.Results;
-
+using NSE.Customers.API.Services;
 namespace NSE.Customers.API.Configuration
 {
     public static class DependencyInjectionConfig
@@ -22,6 +22,10 @@ namespace NSE.Customers.API.Configuration
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<CustomersContext>();
+
         }
     }
+
+
+        
 }

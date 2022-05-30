@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EasyNetQ;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NSE.Core.Messages.Integration;
 using NSE.Identity.API.Models;
+using NSE.MessageBus;
 using NSE.WebAPI.Core.Controllers;
 using NSE.WebAPI.Core.Identity;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,17 +21,20 @@ namespace NSE.Identity.API.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly AppSettings _appSettings; 
+        private readonly AppSettings _appSettings;
+        private IMessageBus _bus;
 
-        public AuthController(SignInManager<IdentityUser> signInManager, 
+        public AuthController(SignInManager<IdentityUser> signInManager,
                               UserManager<IdentityUser> userManager,
-                              IOptions<AppSettings> appSettings)
+                              IOptions<AppSettings> appSettings, 
+                              IMessageBus bus)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _bus = bus;
         }
-            [HttpPost("new-account")]
+        [HttpPost("new-account")]
          public async Task<ActionResult> Register(UserRegister userRegister)
         {
 
@@ -45,9 +51,17 @@ namespace NSE.Identity.API.Controllers
 
             if (result.Succeeded)
             {
+                var customerResult = await RegisterCustomer(userRegister);
+                    
+                if(!customerResult.ValidationResult.IsValid)
+                {
+                    await _userManager.DeleteAsync(user);
+                    return CustomResponse(customerResult.ValidationResult);
+                }
+                
                 return CustomResponse(await GenerateJwt(userRegister.Email));
             }
-
+            
             foreach (var error in result.Errors)
             {
                 AddProcessingError(error.Description);
@@ -55,6 +69,7 @@ namespace NSE.Identity.API.Controllers
 
             return CustomResponse();
         }
+        
 
         [HttpPost("login-auth")]
         public async Task<ActionResult> Login(UserLogin userLogin)
@@ -98,6 +113,7 @@ namespace NSE.Identity.API.Controllers
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpochDate(DateTime.UtcNow).ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));
+            claims.Add(new Claim("Catalog", "Read"));
             foreach (var userRole in userRoles)
             {
                 claims.Add(new Claim("role", userRole));
@@ -108,7 +124,8 @@ namespace NSE.Identity.API.Controllers
 
             return identityClaims;
         }
-        
+
+
         private string EncodeToken(ClaimsIdentity identityClaims)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -139,8 +156,26 @@ namespace NSE.Identity.API.Controllers
                 }
             };
         }
-        private static long ToUnixEpochDate (DateTime date)
+        private static long ToUnixEpochDate(DateTime date)
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
+
+        private async Task<ResponseMessage> RegisterCustomer(UserRegister userRegister)
+        {
+            var user = await _userManager.FindByEmailAsync(userRegister.Email);
+            var userRegistered = new UserRegisteredIntegrationEvent(
+                Guid.Parse(user.Id), userRegister.Name, userRegister.Email, userRegister.Cpf);
+
+            try
+            {
+                return await _bus.RequestAsync<UserRegisteredIntegrationEvent, ResponseMessage>(userRegistered);
+            }
+            catch
+            {
+                await _userManager.DeleteAsync(user);
+                throw;
+            }
+
+        }
 
     }
 }
