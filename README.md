@@ -1,5 +1,5 @@
 
-# A ecommerce application with multiple APIs built with ASP.NET 6
+# A e-commerce application with multiple APIs built with ASP.NET 6
 
 
 ---
