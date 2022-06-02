@@ -3,12 +3,13 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using NSE.WebApp.MVC.Extensions;
+using NSE.WebApp.MVC.Models;
 
 namespace NSE.WebApp.MVC.Services
 {
     public abstract class Service
     {
-        protected StringContent GetSerializeContent(object dado)
+        protected StringContent GetContent(object dado)
         {
             return new StringContent(
                 JsonSerializer.Serialize(dado),
@@ -42,6 +43,11 @@ namespace NSE.WebApp.MVC.Services
 
             response.EnsureSuccessStatusCode();
             return true;
+        }
+
+        protected ResponseResult ReturnOk()
+        {
+            return new ResponseResult();
         }
     }
 }

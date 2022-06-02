@@ -19,29 +19,34 @@ namespace NSE.WebApp.MVC.Configuration
         public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IValidationAttributeAdapterProvider, CpfValidationAttributeAdapterProvider>();
-            services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
-            services.AddHttpClient<IAuthService, AuthService>();
-
-            services.AddHttpClient<ICatalogService, CatalogService>()
-              .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-              .AddPolicyHandler(PollyExtensions.WaitToTry())
-              .AddTransientHttpErrorPolicy(
-                  p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
-            #region refit
-            /*
-               services.AddHttpClient("Refit",
-                      options =>
-                          {
-                           options.BaseAddress = new Uri(configuration.GetSection("CatalogUrl").Value);
-                      })
-                      .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-                      .AddTypedClient(Refit.RestService.For<ICatalogServiceRefit>);
-            */
-            #endregion
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAspNetUser, AspNetUser>();
 
 
+       
+
+            #region HttpServices
+
+            services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
+
+            services.AddHttpClient<IAuthService, AuthService>()
+                .AddPolicyHandler(PollyExtensions.WaitToTry())
+                .AddTransientHttpErrorPolicy(
+                    p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            services.AddHttpClient<ICatalogService, CatalogService>()
+                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+                .AddPolicyHandler(PollyExtensions.WaitToTry())
+                .AddTransientHttpErrorPolicy(
+                    p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            services.AddHttpClient<ICartService, CartService>()
+                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+                .AddPolicyHandler(PollyExtensions.WaitToTry())
+                .AddTransientHttpErrorPolicy(
+                    p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            #endregion
         }
     }
 

@@ -21,7 +21,7 @@ namespace NSE.WebApp.MVC.Services
 
         public async Task<UserResponseLogin> Login(UserLogin userLogin)
         {
-            var loginContent = GetSerializeContent(userLogin);
+            var loginContent = GetContent(userLogin);
 
             var response = await _httpClient.PostAsync("/api/identity/login-auth", loginContent);
 
@@ -38,7 +38,7 @@ namespace NSE.WebApp.MVC.Services
 
         public async Task<UserResponseLogin> Register(UserRegister userRegister)
         {
-            var registerContent = GetSerializeContent(userRegister);
+            var registerContent = GetContent(userRegister);
 
             var response = await _httpClient.PostAsync("/api/identity/new-account", registerContent);
 
