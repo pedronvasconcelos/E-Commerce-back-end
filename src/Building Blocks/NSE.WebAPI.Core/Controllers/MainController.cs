@@ -32,7 +32,7 @@ namespace NSE.WebAPI.Core.Controllers
             var errors = modelState.Values.SelectMany(e => e.Errors);
             foreach (var error in errors)
             {
-                AddProcessingError(error.ErrorMessage);
+                AddNotification(error.ErrorMessage);
             }
 
             return CustomResponse();
@@ -42,7 +42,7 @@ namespace NSE.WebAPI.Core.Controllers
         {
             foreach (var error in validationResult.Errors)
             {
-                AddProcessingError(error.ErrorMessage);
+                AddNotification(error.ErrorMessage);
             }
             return CustomResponse();
         }
@@ -51,7 +51,7 @@ namespace NSE.WebAPI.Core.Controllers
             return !Errors.Any();
         }
 
-        protected void AddProcessingError(string error)
+        protected void AddNotification(string error)
         {
             Errors.Add(error);
         }

@@ -44,7 +44,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="Microsoft.AspNet.Mvc.TagHelpers" Version="6.0.0-rc1-final" />
-	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
+	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.3" />
 	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
 	  <PackageReference Include="Refit" Version="5.1.67" />
@@ -53,6 +53,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Building Blocks\NSE.Core\NSE.Core.csproj" />
+    <ProjectReference Include="..\src\Building Blocks\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

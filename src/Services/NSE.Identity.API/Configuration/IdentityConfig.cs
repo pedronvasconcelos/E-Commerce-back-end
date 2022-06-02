@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using NSE.Identidade.API.Extensions;
+using NSE.Identity.API.Extensions;
 using NSE.Identity.API.Data;
 using NSE.WebAPI.Core.Identity;
 

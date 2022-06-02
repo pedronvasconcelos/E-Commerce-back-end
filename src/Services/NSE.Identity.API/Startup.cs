@@ -1,4 +1,3 @@
-using NSE.Identidade.API.Configuration;
 using NSE.Identity.API.Configuration;
 
 namespace NSE.Identitiy.API

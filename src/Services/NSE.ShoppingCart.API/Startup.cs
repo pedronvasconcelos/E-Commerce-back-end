@@ -1,16 +1,15 @@
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using NSE.Customers.API.Configuration;
+using NSE.ShoppingCart.API.Configuration;
 using NSE.WebAPI.Core.Identity;
 
-namespace NSE.Customers.API
+namespace NSE.ShoppingCart.API
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public IConfiguration Configuration { get; }
 
         public Startup(IHostEnvironment hostEnvironment)
@@ -28,20 +27,24 @@ namespace NSE.Customers.API
 
             Configuration = builder.Build();
         }
-
+        
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddApiConfiguration(Configuration);
             services.AddJwtConfiguration(Configuration);
+
             services.AddSwaggerConfiguration();
             services.RegisterServices();
+
+          //  services.AddMessageBusConfiguration(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwaggerConfiguration();
-       //     app.UseCustomApiConfiguration(env);
-            
+
+            app.UseApiConfiguration(env);
         }
     }
 }

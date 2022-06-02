@@ -64,7 +64,7 @@ namespace NSE.Identity.API.Controllers
             
             foreach (var error in result.Errors)
             {
-                AddProcessingError(error.Description);
+                AddNotification(error.Description);
             }
 
             return CustomResponse();
@@ -85,11 +85,11 @@ namespace NSE.Identity.API.Controllers
 
             if(result.IsLockedOut)
             { 
-                AddProcessingError("User temporary blocked");
+                AddNotification("User temporary blocked");
                 return CustomResponse();
             }
 
-            AddProcessingError("Incorrect username or password");
+            AddNotification("Incorrect username or password");
             return CustomResponse();
         }
 
