@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using NSE.Core.Comunication;
 using NSE.WebApp.MVC.Extensions;
 using NSE.WebApp.MVC.Models;
 
@@ -57,6 +58,19 @@ namespace NSE.WebApp.MVC.Services
             return ReturnOk();
         }
 
-     
+        Task<ResponseResult> ICartService.AddItemCart(ItemProductViewModel product)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ResponseResult> ICartService.UpdateItemCart(Guid productId, ItemProductViewModel product)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ResponseResult> ICartService.RemoveItemCart(Guid productId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

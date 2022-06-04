@@ -5,7 +5,7 @@ namespace NSE.WebApp.MVC.Models
 {
     public class CartViewModel
     {
-        public decimal TotalPrice { get; set; }
+        public decimal TotalValue { get; set; }
 
         public List<ItemProductViewModel> Items { get; set; } = new List<ItemProductViewModel>();
     }
