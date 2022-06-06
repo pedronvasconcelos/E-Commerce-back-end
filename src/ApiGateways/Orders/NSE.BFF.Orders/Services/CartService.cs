@@ -26,14 +26,7 @@ namespace NSE.Bff.Orders.Services
             return await DeserializeObjectResponse<CartDTO>(response);
         }
 
-        public async Task<int> GetQuantityCart()
-        {
-            var response = await _httpClient.GetAsync("/cart-quantity/");
-
-            HandleErrorsResponse(response);
-
-            return await DeserializeObjectResponse<int>(response);
-        }
+ 
         
         public async Task<ResponseResult> AddItemCart(ItemCartDTO product)
         {

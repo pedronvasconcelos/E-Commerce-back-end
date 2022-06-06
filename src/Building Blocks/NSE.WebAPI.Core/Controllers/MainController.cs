@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using NSE.Core.Comunication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NSE.WebAPI.Core.Controllers
-{   
+{
     [ApiController]
     public abstract class MainController : Controller
     {
@@ -38,13 +39,32 @@ namespace NSE.WebAPI.Core.Controllers
             return CustomResponse();
         }
 
-        protected ActionResult CustomResponse (ValidationResult validationResult)
+        protected ActionResult CustomResponse(ValidationResult validationResult)
         {
             foreach (var error in validationResult.Errors)
             {
                 AddNotification(error.ErrorMessage);
             }
             return CustomResponse();
+        }
+
+
+        protected ActionResult CustomResponse (ResponseResult response)
+        {
+            ResponseHasErrors(response);
+
+            return CustomResponse();
+        }
+        protected bool ResponseHasErrors(ResponseResult response)
+        {
+            if (response == null || !response.Errors.Messages.Any()) return false;
+
+            foreach (var message in response.Errors.Messages)
+            {
+                AddNotification(message);
+            }
+
+            return true;
         }
         protected bool OperationValid()
         {
